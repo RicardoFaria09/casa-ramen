@@ -1,0 +1,653 @@
+/* Reset e base tipografica do site. Sem isto, o browser usa o seu
+   tipo de letra por omissao (normalmente um serif tipo Times New Roman),
+   o que nao transmite a modernidade pedida na proposta do projeto. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  color: #1f1713;
+  background-color: #fff;
+  line-height: 1.5;
+}
+
+/* Navbar: menu principal do site. */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 18px 20px;
+  background-color: #1f1713;
+}
+
+nav a {
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #f2b56b;
+}
+
+/* Em telemovel, os links podem passar para a linha seguinte. */
+@media (max-width: 600px) {
+  nav {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+}
+
+/* Estilos da pagina inicial. */
+.home-page {
+  padding-bottom: 40px;
+}
+
+/* Hero: primeira zona visual da Home, com destaque para o restaurante. */
+.hero-section {
+  background-color: #7a2518;
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero-label {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.hero-section h1 {
+  font-size: 42px;
+  margin: 16px 0;
+}
+
+.hero-section p {
+  max-width: 650px;
+  margin: 0 auto;
+  font-size: 18px;
+}
+
+.intro-section {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+/* Os destaques ficam lado a lado em ecra grande. */
+.highlights-section {
+  display: flex;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.highlight-card {
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.highlight-card h3 {
+  margin-top: 0;
+  color: #7a2518;
+}
+
+/* Galeria de imagens da Home (extra sugerido na proposta). Grelha
+   responsiva: 3 colunas em ecra grande, menos colunas conforme o ecra
+   encolhe (ver media queries abaixo). */
+.gallery-section {
+  max-width: 1000px;
+  margin: 50px auto 0;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.gallery-section h2 {
+  color: #7a2518;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* Todas as fotos da galeria com o mesmo tamanho, para a grelha ficar
+   alinhada mesmo com imagens de proporcoes diferentes. */
+.gallery-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Adaptacao da Home para telemoveis. */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 50px 20px;
+  }
+
+  .hero-section h1 {
+    font-size: 32px;
+  }
+
+  .highlights-section {
+    flex-direction: column;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Estilos da pagina Menu. */
+.menu-page {
+  padding: 40px 20px;
+}
+
+.page-header {
+  max-width: 700px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.menu-section {
+  max-width: 800px;
+  margin: 0 auto 40px;
+}
+
+.menu-section h2 {
+  border-bottom: 2px solid #7a2518;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+/* Estilos partilhados do componente DishCard (usado nas paginas Menu e
+   Especialidades). Aqui definimos o "layout base": imagem opcional a
+   esquerda, nome e preco na mesma linha, descricao por baixo. */
+.dish-card {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.dish-card-image {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+/* Botao que envolve a miniatura (do DishCard ou da galeria da Home) no
+   componente ImagePopup. Sem estilo de botao (sem borda/fundo), so para
+   ganhar foco de teclado e acessibilidade, mantendo a aparencia de uma
+   simples imagem clicavel. */
+.image-popup-trigger {
+  display: block;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Fundo escurecido que cobre o ecra todo enquanto o pop-up esta aberto. */
+.image-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+/* Todas as imagens ampliadas no pop-up usam o mesmo tamanho, tal como
+   pedido na proposta ("todas as imagens devem ter o mesmo tamanho"),
+   independentemente do tamanho da miniatura de onde partiram. */
+.image-popup-enlarged {
+  width: min(90vw, 480px);
+  height: min(90vw, 480px);
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.image-popup-close {
+  padding: 10px 20px;
+  border: none;
+  background-color: #7a2518;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.image-popup-close:hover {
+  background-color: #f2b56b;
+  color: #1f1713;
+}
+
+.dish-card-content {
+  flex: 1;
+}
+
+.dish-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.dish-card-header h2,
+.dish-card-header h3 {
+  margin: 0 0 6px;
+  color: #7a2518;
+}
+
+.dish-card-content p {
+  margin: 0;
+}
+
+.dish-card-price {
+  font-weight: bold;
+  white-space: nowrap;
+  color: #7a2518;
+}
+
+.takeaway-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #fff3df;
+  text-align: center;
+}
+
+/* Estilos da pagina Especialidades. */
+.specialties-page {
+  padding: 40px 20px;
+}
+
+/* Lista dos pratos em destaque. */
+.specialties-list {
+  display: flex;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Nesta pagina, o DishCard aparece como um cartao independente (com
+   borda em todo o contorno e fundo branco), em vez da lista com borda
+   inferior usada na pagina Menu. Por isso sobrescrevemos aqui o layout
+   base definido em ".dish-card". */
+.specialties-list .dish-card {
+  flex: 1;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.specialties-list .dish-card-header {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.specialties-list .dish-card-price {
+  margin-top: 16px;
+}
+
+/* Nesta pagina queremos dar mais destaque a imagem do prato (a propria
+   proposta pede "tamanho e qualidade das imagens" aqui), por isso
+   aumentamos a imagem e fazemo-la "sair" do padding do cartao para
+   ocupar toda a largura, em vez do tamanho pequeno usado no Menu. */
+.specialties-list .dish-card-image {
+  width: calc(100% + 48px);
+  height: 180px;
+  margin: -24px -24px 16px;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Estilos da pagina Menus de Grupo. */
+.groups-page {
+  padding: 40px 20px;
+}
+
+.group-menus-list {
+  max-width: 850px;
+  margin: 0 auto 40px;
+}
+
+.group-menu-card {
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  text-align: left;
+}
+
+.group-menu-card summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 20px;
+  cursor: pointer;
+  color: #7a2518;
+  font-weight: bold;
+}
+
+.group-menu-card p {
+  padding: 0 20px;
+  margin: 0 0 12px;
+}
+
+.group-menu-card ul {
+  margin: 0;
+  padding: 0 20px 20px 40px;
+}
+
+.group-reservation-box {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #fff3df;
+  text-align: center;
+}
+
+.reservation-link {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 12px 20px;
+  background-color: #7a2518;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.reservation-link:hover {
+  background-color: #1f1713;
+}
+
+/* Estilos da pagina Reservas. */
+.reservations-page {
+  padding: 40px 20px;
+}
+
+.reservations-content {
+  display: flex;
+  gap: 28px;
+  max-width: 1000px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.reservation-form-box,
+.reservation-info {
+  flex: 1;
+  padding: 24px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  text-align: left;
+}
+
+.reservation-form-box h2,
+.reservation-info h2 {
+  margin-top: 0;
+  color: #7a2518;
+}
+
+.reservation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reservation-form label {
+  font-weight: bold;
+}
+
+.reservation-form input,
+.reservation-form select,
+.reservation-form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  font: inherit;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+/* Sem isto, o label e o input de cada campo ("Data" e "Hora") ficavam
+   lado a lado em vez de empilhados, ao contrario de todos os outros
+   campos do formulario (Nome, Email, etc.). */
+.form-row div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.reservation-form button {
+  margin-top: 10px;
+  padding: 12px 20px;
+  border: none;
+  background-color: #7a2518;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.reservation-form button:hover {
+  background-color: #1f1713;
+}
+
+.reservation-form button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Mensagens de feedback depois de enviar o formulario de reserva. */
+.form-status {
+  margin-top: 10px;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.form-status-success {
+  background-color: #e3f3e1;
+  color: #2e6b2e;
+}
+
+.form-status-error {
+  background-color: #f8e0dd;
+  color: #7a2518;
+}
+
+.info-block {
+  margin-bottom: 24px;
+}
+
+/* Mapa incorporado no bloco "Localizacao". Largura total do bloco e
+   altura fixa, com bordas arredondadas para condizer com o resto do
+   site (cartoes, imagens, etc.). */
+.location-map {
+  width: 100%;
+  height: 220px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 8px;
+}
+
+.info-block h3 {
+  margin-bottom: 8px;
+  color: #7a2518;
+}
+
+/* Pagina 404 (endereco nao encontrado). */
+.not-found-page {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.not-found-page h1 {
+  color: #7a2518;
+}
+
+/* Estilo simples para as paginas legais (Privacidade, Cookies, Aviso
+   Legal), organizadas em secoes com titulo (h2) e paragrafo. */
+.legal-page {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.legal-page h2 {
+  margin-top: 28px;
+  color: #7a2518;
+}
+
+/* Lista de creditos de imagens (secao "Creditos de imagens" do Aviso
+   Legal). Espacamento entre entradas para facilitar a leitura. */
+.image-credits-list {
+  padding-left: 20px;
+}
+
+.image-credits-list li {
+  margin-bottom: 8px;
+}
+
+/* Rodape: texto de copyright + links das redes sociais lado a lado. */
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  background-color: #1f1713;
+  color: white;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Links das redes sociais, separados por um pequeno espaco entre eles. */
+.footer-social {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-social a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-social a:hover {
+  color: #f2b56b;
+}
+
+/* Links para as paginas legais - mesmo estilo dos links sociais, mas
+   com um pouco menos de destaque (font-weight normal), por serem
+   informacao secundaria. */
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-legal a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-legal a:hover {
+  color: #f2b56b;
+}
+
+/* Banner de cookies: fica fixo no fundo do ecra, por cima do resto do
+   conteudo, ate o utilizador clicar em "Aceitar". */
+.cookie-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background-color: #1f1713;
+  color: white;
+  text-align: center;
+}
+
+.cookie-banner p {
+  margin: 0;
+  max-width: 600px;
+}
+
+.cookie-banner a {
+  color: #f2b56b;
+}
+
+.cookie-banner button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #7a2518;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cookie-banner button:hover {
+  background-color: #f2b56b;
+  color: #1f1713;
+}
+
+/* Em ecra pequeno, o preco passa para baixo da descricao. */
+@media (max-width: 600px) {
+  .dish-card {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .specialties-list {
+    flex-direction: column;
+  }
+
+  .group-menu-card summary {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .reservations-content,
+  .form-row {
+    flex-direction: column;
+  }
+}
