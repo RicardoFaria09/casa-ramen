@@ -3,6 +3,8 @@
 A multi-page website for a ramen restaurant, built with **React** and **Vite**.
 Final project of the front-end module at Tokio School.
 
+**🔗 Live demo:** [casa-ramen.vercel.app](https://casa-ramen.vercel.app)
+
 > 🇵🇹 Site de um restaurante de ramen com menu, especialidades, menus de grupo e formulário de reservas que envia emails reais. Feito em React e Vite como projeto final do módulo de front-end da Tokio School.
 
 <!-- Add a screenshot of the home page to docs/screenshot.png and remove these comment marks:
